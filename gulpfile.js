@@ -1,12 +1,11 @@
-var vinylPaths  = require('vinyl-paths');
-var gulpIf      = require('gulp-if');
-var concat      = require('gulp-concat');
-var babel       = require('gulp-babel');
-var webpack     = require('gulp-webpack');
-var mocha       = require('gulp-mocha');
-var gulp        = require('gulp');
-var del         = require('del');
-                  require('babel-core/register');
+var vinylPaths    = require('vinyl-paths');
+var gulpIf        = require('gulp-if');
+var concat        = require('gulp-concat');
+var babel         = require('gulp-babel');
+var mocha         = require('gulp-mocha');
+var gulp          = require('gulp');
+var del           = require('del');
+                    require('babel-core/register');
 
 var sources = 'src/main/javascript';
 var tests   = 'src/test/javascript';
@@ -18,24 +17,12 @@ gulp.task('clear', function() {
 });
 
 gulp.task('default', ['clear'], function() {
-  return gulp.src([sources, project, 'index.js'].join('/'))
-    .pipe(webpack({
-      output: {
-        libraryTarget: 'umd'
-      },
-      module: {
-        loaders: [{
-          test: /\.js$/,
-          exclude: /(node_modules)/,
-          loader: 'babel',
-          query: {
-            "stage": 1,
-            "optional": ["runtime"]
-          }
-        }]
-      }
+  return gulp.src([sources, project, '**/*.js'].join('/'))
+    .pipe(babel({
+      'stage': 1,
+      'modules': 'umd',
+      'optional': ['runtime']
     }))
-    .pipe(concat('rustie.js'))
     .pipe(gulp.dest('lib/javascript'));
 });
 
